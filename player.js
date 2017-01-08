@@ -16,7 +16,7 @@ $(document).ready(function () {
 		});
 		var n = Math.floor(Math.random() * musiclist.length);
 		id = musiclist[n].id;
-		$.get("player.php?type=play&id=" + id, function (data) {
+		$.get("https://www.hiyouga.win/html/netease/bbsapi/player.php?type=play&id=" + id, function (data) {
 			mp3_info = JSON.parse(data);
 			$("#player").attr("src", mp3_info.mp3);
 			$("#like_music").attr("href", "javascript:like_music("+id+");");
@@ -75,7 +75,7 @@ function next_music() {
     load_music(id);
 }
 function load_music(id) {
-    $.get("player.php?type=play&id=" + id, function (data) {
+    $.get("https://www.hiyouga.win/html/netease/bbsapi/player.php?type=play&id=" + id, function (data) {
         mp3_info = JSON.parse(data);
         $("#player").attr("src", mp3_info.mp3);
 		$("#like_music").attr("href", "javascript:like_music("+id+");");
@@ -160,13 +160,13 @@ function close_panel(){
 }
 function add_music(){
 	newid = $("#add_music").val();
-	$.get("player.php?type=upload&id=" + newid, function (data) {
+	$.get("https://www.hiyouga.win/html/netease/bbsapi/player.php?type=upload&id=" + newid, function (data) {
 		alert(data);
     });
 	$("#add_music").val("");
 }
 function like_music(id){
-	$.get("player.php?type=dolike&id=" + id, function (data) {
+	$.get("https://www.hiyouga.win/html/netease/bbsapi/player.php?type=dolike&id=" + id, function (data) {
 		if (data = "success") {
 			$("#like_music").removeClass("ico_like");
 			$("#like_music").addClass("ico_unlike");
