@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<meta name="author" content="hoshi_hiyouga,Moonlib" />
+<title>Hiyouga Player</title>
+<link rel="stylesheet" href="main.css">
+<style>
+html,body{
+    margin: 0;
+    padding: 0;
+    border: 0;
+	width: 100%;
+    height: 100%;
+	font-family: Microsoft YaHei;
+}
+</style>
+</head>
+<body>
+<!-- hiyougaplayer -->
+<div id="hiyougaplayer" class="hiyougaplayer">
+<div class="mini_panel" id="mini_panel">
+	<a href="javascript:m_play();" title="播放/暂停">
+		<i class="ico_ctrl ico_mini_play" id="miniplay"></i>
+		<span class="mask"></span>
+		<img class="pic" src="default_cover.jpg"/>
+	</a>
+	<div class="mini_unfold">
+		<a href="javascript:mini_toggle();" class="ico_ctrl ico_unfold" title="展开"></a>
+	</div>
+	<a href="javascript:close_panel();" class="ico_ctrl ico_close mini_close" title="关闭"></a>
+</div>
+<div class="panel" id="panel">
+	<div class="s-progress">
+		<div id="bar" class="s-bar" style="width:0%;"></div>
+	</div>
+	<div id="album" class="album"></div>
+	<div class="s-info">
+		<div><span id="music_name"></span><br /><span id="artist"></span><br /><span class="neurl">来自：<a id="neurl" rel="nofollow" target="_black" href="">网易云</a></span></div>
+	</div>
+	<div class="s-action">
+		<div>
+			<a href="javascript:prev_music();" id="pre" class="ico_ctrl ico_prev" title="上一首"></a>
+			<a href="javascript:m_play();" id="play" class="ico_ctrl ico_play" title="播放/暂停"></a>
+			<a href="javascript:next_music();" id="next" class="ico_ctrl ico_next" title="下一首"></a>
+			<a href="javascript:m_mute();" id="volume" class="ico_ctrl ico_vol" title="音量"></a>
+			<a><input id="range" type="range" min="0" max="10" value="5" onchange="volume(this.value);"></a>
+			<a href="javascript:like_music();" id="like_music" class="ico_ctrl ico_like" title="赞"></a>
+			<a download href="" id="dl_music" class="ico_ctrl ico_share" title="下载" onClick="alert('\u8bf7\u624b\u52a8\u91cd\u547d\u540d\u4e3a.mp3\u6587\u4ef6');"></a>
+			<a href="javascript:showlist();" class="ico_ctrl ico_list" title="展开列表"></a>
+			<a href="javascript:showlrc();" class="ico_lyric ico_lyric_open" title="显示歌词">词</a>
+		</div>
+	</div>
+	<div class="s-toggle"><a href="javascript:toggle();" class="ico_ctrl ico_fold" title="折叠"></a></div>
+</div>
+<div id="lrcwarp" class="lrcwarp">
+	<span id="lrc" class="s-lrc"></span>
+</div>
+<div id="listwarp" class="listwarp">
+	<div class="upload"><input id="add_music" id="music_id" type="text" /> <a href="javascript:add_music();">安利!</a></div>
+	<div id="musiclist" class="musiclist"></div>
+</div>
+<audio id="player"></audio>
+</div>
+<script src="jquery.js"></script>
+<script src="player.js"></script>
+</body>
+</html>
