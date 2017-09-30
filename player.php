@@ -289,6 +289,7 @@ if($_GET['type']=='upload'){
 	}
 	$add = array("title"=>$title,"singer"=>$artists,"like"=>"0","id"=>$id);
 	$newarr[] = $add;
+	$recontents = '';
 	foreach ($newarr as $k=>$v) {
 		$recontents .= json_encode($v).',';
 	}
