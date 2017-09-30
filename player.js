@@ -1,4 +1,7 @@
-﻿oAudio = document.getElementById('player');
+var txt = '<div class="mini_panel" id="mini_panel"><a href="javascript:m_play();" title="播放/暂停"><i class="ico_ctrl ico_mini_play" id="miniplay"></i><span class="mask"></span><img class="pic" src="/res/images/default_cover.jpg"/></a><div class="mini_unfold"><a href="javascript:mini_toggle();" class="ico_ctrl ico_unfold" title="展开"></a></div><a href="javascript:close_panel();" class="ico_ctrl ico_close mini_close" title="关闭"></a></div><div class="panel" id="panel"><div class="s-progress"><div id="bar" class="s-bar" style="width:0%;"></div></div><div id="album" class="album"></div><div class="s-info"><div><span id="music_name"></span><br /><span id="artist"></span><br /><span class="neurl">来自：<a id="neurl" rel="nofollow" target="_black" href="">网易云</a></span></div></div><div class="s-action"><div><a href="javascript:prev_music();" id="pre" class="ico_ctrl ico_prev" title="上一首"></a><a href="javascript:m_play();" id="play" class="ico_ctrl ico_play" title="播放/暂停"></a><a href="javascript:next_music();" id="next" class="ico_ctrl ico_next" title="下一首"></a><a href="javascript:m_mute();" id="volume" class="ico_ctrl ico_vol" title="音量"></a><a><input id="range" type="range" min="0" max="10" value="5" onchange="volume(this.value);"></a><a href="javascript:like_music();" id="like_music" class="ico_ctrl ico_like" title="赞"></a><a download href="" id="dl_music" class="ico_ctrl ico_share" title="下载" onClick="showtip();"></a><a href="javascript:showlist();" class="ico_ctrl ico_list" title="展开列表"></a><a href="javascript:showlrc();" class="ico_lyric ico_lyric_open" title="显示歌词">词</a></div></div><div class="s-toggle"><a href="javascript:toggle();" class="ico_ctrl ico_fold" title="折叠"></a></div></div><div id="lrcwarp" class="lrcwarp"><span id="lrc" class="s-lrc"></span></div><div id="listwarp" class="listwarp"><div class="upload"><input id="add_music" id="music_id" type="text" /> <a href="javascript:add_music();">安利!</a></div><div id="musiclist" class="musiclist"></div></div><audio id="player"></audio>';
+$("#hiyougaplayer").html(txt);
+var oAudio = $("#player")[0];
+oAudio.volume = 0.5;
 play = $("#play");
 album = $("#album");
 inn = $("#in");
@@ -8,31 +11,28 @@ neurl = $("#neurl");
 cd = $("#cd");
 lrc_row = $("#lrc");
 bar = $("#bar");
-$(document).ready(function () {
-	cd_size();
-	$.getScript("list.js", function() {
-		$.each(musiclist,function(index,item){
-			$("#musiclist").append('<a href="javascript:load_music('+item.id+');"><li><strong>'+item.title+'</strong>&nbsp;&nbsp;--&nbsp;&nbsp;<small>'+item.singer+'&nbsp;&nbsp;(♥'+item.like+')</small></li></a>');
-		});
-		var n = Math.floor(Math.random() * musiclist.length);
-		id = musiclist[n].id;
-		$.get("https://www.hiyouga.win/html/netease/bbsapi/player.php?type=play&id=" + id, function (data) {
-			mp3_info = JSON.parse(data);
-			$("#player").attr("src", mp3_info.mp3);
-			$("#like_music").attr("href", "javascript:like_music("+id+");");
-			$("#dl_music").attr("href", mp3_info.mp3);
-			album.css("background-image", "url('" + mp3_info.cover + "?param=100y100')");
-			music_name.html(mp3_info.music_name);
-			artist.html(mp3_info.artists);
-			neurl.attr("href", 'http://music.163.com/song?id='+id);
-			if (mp3_info.lrc != "no") {
-				lrc = mp3_info.lrc;
-			} else {
-				lrc = "no";
-			}
-		});
+cd_size();
+$.getScript("/html/netease/bbsapi/list.js", function() {
+	$.each(musiclist,function(index,item){
+		$("#musiclist").prepend('<a href="javascript:load_music('+item.id+');"><li><strong>'+item.title+'</strong>&nbsp;&nbsp;--&nbsp;&nbsp;<small>'+item.singer+'&nbsp;&nbsp;(♥'+item.like+')</small></li></a>');
 	});
-	oAudio.volume = 0.5;
+	var n = Math.floor(Math.random() * musiclist.length);
+	id = musiclist[n].id;
+	$.get("/html/netease/bbsapi/player.php?type=play&id=" + id, function (data) {
+		mp3_info = JSON.parse(data);
+		$("#player").attr("src", mp3_info.mp3);
+		$("#like_music").attr("href", "javascript:like_music("+id+");");
+		$("#dl_music").attr("href", mp3_info.mp3);
+		album.css("background-image", "url('" + mp3_info.cover + "?param=100y100')");
+		music_name.html(mp3_info.music_name);
+		artist.html(mp3_info.artists);
+		neurl.attr("href", 'http://music.163.com/song?id='+id);
+		if (mp3_info.lrc != "no") {
+			lrc = mp3_info.lrc;
+		} else {
+			lrc = "no";
+		}
+	});
 });
 $(window).resize(function () {
     cd_size();
@@ -75,7 +75,7 @@ function next_music() {
     load_music(id);
 }
 function load_music(id) {
-    $.get("https://www.hiyouga.win/html/netease/bbsapi/player.php?type=play&id=" + id, function (data) {
+    $.get("/html/netease/bbsapi/player.php?type=play&id=" + id, function (data) {
         mp3_info = JSON.parse(data);
         $("#player").attr("src", mp3_info.mp3);
 		$("#like_music").attr("href", "javascript:like_music("+id+");");
@@ -148,6 +148,9 @@ function mini_toggle(){
 		"width":"850px"
 	});
 }
+function showtip(){
+	alert('\u8bf7\u624b\u52a8\u91cd\u547d\u540d\u4e3a.mp3\u6587\u4ef6');
+}
 function showlrc(){
 	$("#lrcwarp").fadeToggle(300);
 }
@@ -160,16 +163,17 @@ function close_panel(){
 }
 function add_music(){
 	newid = $("#add_music").val();
-	$.get("https://www.hiyouga.win/html/netease/bbsapi/player.php?type=upload&id=" + newid, function (data) {
+	$.get("/html/netease/bbsapi/player.php?type=upload&id=" + newid, function (data) {
 		alert(data);
+		$("#add_music").val("");
     });
-	$("#add_music").val("");
 }
 function like_music(id){
-	$.get("https://www.hiyouga.win/html/netease/bbsapi/player.php?type=dolike&id=" + id, function (data) {
-		if (data = "success") {
+	$.get("/html/netease/bbsapi/player.php?type=dolike&id=" + id, function (data) {
+		if (data = "success"){
 			$("#like_music").removeClass("ico_like");
 			$("#like_music").addClass("ico_unlike");
+			$("#like_music").attr("href", "javascript:like_music();");
 		}
     });
 }
