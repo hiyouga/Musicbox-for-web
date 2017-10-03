@@ -219,7 +219,9 @@ if($_GET['type']=='play'){
 	//处理音乐信息
 	$play_info["cover"] = $music_info["songs"][0]["album"]["picUrl"];
 	$data = $get_music->get_netease($id);
-	$play_info["mp3"] = $data['src'];
+	if($data!=NULL){
+		$play_info["mp3"] = $data['src'];
+	}
 	$play_info["music_name"] = $music_info["songs"][0]["name"];
 	foreach ($music_info["songs"][0]["artists"] as $key) {
 		if (!isset($play_info["artists"])) {
@@ -270,13 +272,15 @@ if($_GET['type']=='upload'){
 		exit;
 	}
 	$data = $get_music->get_netease($id);
-	$mp3 = $data['src'];
+	if($data!=NULL){
+		$mp3 = $data['src'];
+	}
 	if(get_headers($mp3)[4]=='Content-Length: 168'){
 		echo '该歌曲不属于支持范围内，请重新选曲！';
 		exit;
 	}
 	$contents = file_get_contents('list.js');
-	if(!!strpos($contents,$title)){
+	if(strpos($contents,json_encode($title))){
 		echo '歌曲已存在，请不要重复提交！';
 		exit;
 	}
